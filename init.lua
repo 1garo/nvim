@@ -66,6 +66,8 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
 
+  'ms-jpq/chadtree', 
+  'ryanoasis/vim-devicons',
   -- Git related plugins
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
@@ -114,7 +116,7 @@ require('lazy').setup({
 
   { -- Gruvbox theme
     'morhetz/gruvbox',
-    priority = 2,
+    priority = 3,
     config = function()
       vim.cmd.colorscheme 'gruvbox'
     end,
@@ -122,7 +124,7 @@ require('lazy').setup({
 
   { -- Gruvbox theme
     'rebelot/kanagawa.nvim',
-    priority = 1,
+    priority = 2,
     opts = {
       theme = "wave",              -- Load "wave" theme when 'background' option is not set
       background = {                 -- map the value of 'background' option to a theme
@@ -131,14 +133,14 @@ require('lazy').setup({
       },
     },
     config = function()
-      vim.o.background = ''
+      --vim.o.background = ''
       vim.cmd.colorscheme 'kanagawa-dragon'
     end,
   },
 
   { -- Theme inspired by Atom
     'navarasu/onedark.nvim',
-    priority = 3,
+    priority = 1,
     config = function()
       vim.cmd.colorscheme 'onedark'
     end,
@@ -151,7 +153,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'kanagawa',
+        theme = 'onedark',
         component_separators = '|',
         section_separators = '',
       },
@@ -214,11 +216,13 @@ require('lazy').setup({
   --
   --    An additional note is that if you only copied in the `init.lua`, you can just comment this line
   --    to get rid of the warning telling you that there are not plugins in `lua/custom/plugins/`.
-  { import = 'custom.plugins' },
+  -- { import = 'custom.plugins' },
 }, {})
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
+
+vim.o.encoding="utf-8"
 
 -- Set highlight on search
 vim.o.hlsearch = false
@@ -242,7 +246,6 @@ vim.o.undofile = true
 
 -- Use relative lines
 vim.o.relativenumber = true
-
 
 -- Case insensitive searching UNLESS /C or capital in search
 vim.o.ignorecase = true
@@ -339,7 +342,7 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'help', 'vim' },
+  ensure_installed = { 'c', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'help', 'vim' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
@@ -406,6 +409,12 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = "Go to previous dia
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = "Go to next diagnostic message" })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
+vim.keymap.set(
+  "n",
+  "<leader>v",
+  ":CHADopen<cr>",
+  { noremap = true }
+ )
 
 -- LSP settings.
 --  This function gets run when an LSP connects to a particular buffer.
