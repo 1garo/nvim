@@ -35,7 +35,6 @@ I hope you enjoy your Neovim journey,
 
 P.S. You can delete this when you're done too. It's your config now :)
 --]]
-
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
@@ -65,8 +64,26 @@ vim.opt.rtp:prepend(lazypath)
 --    as they will be available in your neovim runtime.
 require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
+  --
+  
 
-  'ms-jpq/chadtree', 
+  {
+    "ray-x/go.nvim",
+    dependencies = { -- optional packages
+      "ray-x/guihua.lua",
+      "neovim/nvim-lspconfig",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("go").setup()
+    end,
+    event = { "CmdlineEnter" },
+    ft = { "go", 'gomod' },
+    build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
+  },
+
+
+  'ms-jpq/chadtree',
   'ryanoasis/vim-devicons',
   -- Git related plugins
   'tpope/vim-fugitive',
@@ -77,7 +94,8 @@ require('lazy').setup({
 
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
-  { -- LSP Configuration & Plugins
+  {
+    -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
     dependencies = {
       -- Automatically install LSPs to stdpath for neovim
@@ -93,14 +111,16 @@ require('lazy').setup({
     },
   },
 
-  { -- Autocompletion
+  {
+    -- Autocompletion
     'hrsh7th/nvim-cmp',
     dependencies = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' },
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
-  { -- Adds git releated signs to the gutter, as well as utilities for managing changes
+  { 'folke/which-key.nvim',          opts = {} },
+  {
+    -- Adds git releated signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {
       -- See `:help gitsigns.txt`
@@ -114,22 +134,49 @@ require('lazy').setup({
     },
   },
 
-  { -- Gruvbox theme
-    'morhetz/gruvbox',
+  {
+    -- Rose Pine theme
+    'sainnhe/gruvbox-material',
+    priority = 1,
+    config = function()
+      vim.g.gruvbox_material_background = 'soft'
+      vim.o.background = 'dark'
+      vim.g.gruvbox_material_better_performance = 1
+      vim.cmd.colorscheme 'gruvbox-material'
+    end,
+  },
+  {
+    -- Rose Pine theme
+    'rose-pine/neovim',
     priority = 3,
+    opts = {
+      variant = "auto"
+    },
+    config = function()
+      vim.o.background = 'light'
+      vim.cmd.colorscheme 'rose-pine'
+    end,
+  },
+
+  {
+    -- Gruvbox theme
+    'morhetz/gruvbox',
+    priority = 5,
     config = function()
       vim.cmd.colorscheme 'gruvbox'
     end,
   },
 
-  { -- Gruvbox theme
+  {
+    -- Gruvbox theme
     'rebelot/kanagawa.nvim',
     priority = 2,
     opts = {
-      theme = "wave",              -- Load "wave" theme when 'background' option is not set
-      background = {                 -- map the value of 'background' option to a theme
-          dark = "wave",             -- try "dragon" !
-          light = "lotus"
+      theme = "wave",    -- Load "wave" theme when 'background' option is not set
+      background = {
+                         -- map the value of 'background' option to a theme
+        dark = "wave",   -- try "dragon" !
+        light = "lotus"
       },
     },
     config = function()
@@ -138,29 +185,32 @@ require('lazy').setup({
     end,
   },
 
-  { -- Theme inspired by Atom
+  {
+    -- Theme inspired by Atom
     'navarasu/onedark.nvim',
-    priority = 1,
+    priority = 4,
     config = function()
       vim.cmd.colorscheme 'onedark'
     end,
   },
 
 
-  { -- Set lualine as statusline
+  {
+    -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
     -- See `:help lualine.txt`
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'onedark',
+        theme = 'gruvbox-material',
         component_separators = '|',
         section_separators = '',
       },
     },
   },
 
-  { -- Add indentation guides even on blank lines
+  {
+    -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help indent_blankline.txt`
@@ -174,7 +224,7 @@ require('lazy').setup({
   },
 
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  { 'numToStr/Comment.nvim',         opts = {} },
 
   -- Fuzzy Finder (files, lsp, etc)
   { 'nvim-telescope/telescope.nvim', version = '*', dependencies = { 'nvim-lua/plenary.nvim' } },
@@ -192,7 +242,8 @@ require('lazy').setup({
     end,
   },
 
-  { -- Highlight, edit, and navigate code
+  {
+    -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
       'nvim-treesitter/nvim-treesitter-textobjects',
@@ -221,8 +272,37 @@ require('lazy').setup({
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
+--
+vim.opt.guicursor = ""
 
-vim.o.encoding="utf-8"
+--local format_sync_grp = vim.api.nvim_create_augroup("GoFormat", {})
+--vim.api.nvim_create_autocmd("BufWritePre", {
+--  pattern = "*.go",
+--  callback = function()
+--    require('go.format').goimport()
+--  end,
+--  group = format_sync_grp,
+--})
+
+vim.opt.nu = true
+vim.opt.relativenumber = true
+
+vim.opt.tabstop = 2
+vim.opt.softtabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true
+
+vim.opt.smartindent = true
+vim.opt.termguicolors = true
+
+vim.opt.scrolloff = 8
+vim.opt.signcolumn = "yes"
+
+vim.opt.updatetime = 50
+
+vim.opt.colorcolumn = "80"
+
+vim.o.encoding = "utf-8"
 
 -- Set highlight on search
 vim.o.hlsearch = false
@@ -278,12 +358,12 @@ vim.keymap.set('n', '<leader>ps', function()
 end)
 
 -- Open explorer
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+--vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
 -- IDK what this does
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-vim.keymap.set("n", "J", "mzJ`z")
+--vim.keymap.set("n", "J", "mzJ`z")
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
@@ -342,7 +422,7 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'help', 'vim' },
+  ensure_installed = { 'c', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'help', 'vim', 'elixir' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
@@ -411,10 +491,19 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = "Open float
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
 vim.keymap.set(
   "n",
+  "<leader>cf",
+  ":GoFmt<cr>",
+  {
+    noremap = true,
+    desc = "Code format"
+  }
+)
+vim.keymap.set(
+  "n",
   "<leader>v",
   ":CHADopen<cr>",
   { noremap = true }
- )
+)
 
 -- LSP settings.
 --  This function gets run when an LSP connects to a particular buffer.
@@ -468,11 +557,15 @@ end
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
   -- clangd = {},
-  gopls = {},
+  gopls = {
+    analyses = {
+      unusedparams = true,
+    },
+    staticcheck = true,
+  },
   -- pyright = {},
   rust_analyzer = {},
   tsserver = {},
-
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
