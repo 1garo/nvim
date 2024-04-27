@@ -37,7 +37,7 @@ require('lazy').setup({
   },
 
 
-  'ms-jpq/chadtree',
+  --'ms-jpq/chadtree',
   'ryanoasis/vim-devicons',
   -- Git related plugins
   'tpope/vim-fugitive',
@@ -89,9 +89,17 @@ require('lazy').setup({
   },
 
   {
+    -- Paper theme
+    'yorickpeterse/vim-paper',
+    priority = 111,
+    config = function()
+      vim.cmd.colorscheme 'paper'
+    end,
+  },
+  {
     -- Rose Pine theme
     'sainnhe/gruvbox-material',
-    priority = 1,
+    priority = 122,
     config = function()
       vim.g.gruvbox_material_background = 'hard'
       vim.o.background = 'dark'
@@ -115,8 +123,9 @@ require('lazy').setup({
   {
     -- Gruvbox theme
     'morhetz/gruvbox',
-    priority = 5,
+    priority = 1,
     config = function()
+      vim.o.background = 'dark'
       vim.cmd.colorscheme 'gruvbox'
     end,
   },
@@ -281,7 +290,7 @@ vim.o.termguicolors = true
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
 -- Keymap to go back to normal mode on new tab terminal
-vim.keymap.set('t', '<leader><C-B>', '<C-\\><C-N>', { noremap = true, silent = true})
+--vim.keymap.set('t', '<leader><C-B>', '<C-\\><C-N>', { noremap = true, silent = true})
 
 -- Keymaps to grep string
 local builtin = require('telescope.builtin')
@@ -290,7 +299,7 @@ vim.keymap.set('n', '<leader>ps', function()
 end)
 
 -- Open explorer
---vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
 -- IDK what this does
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
@@ -416,6 +425,7 @@ require('nvim-treesitter.configs').setup {
   },
 }
 
+vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end)
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic message" })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = "Go to next diagnostic message" })
@@ -430,12 +440,12 @@ vim.keymap.set(
     desc = "Code format"
   }
 )
-vim.keymap.set(
-  "n",
-  "<leader>v",
-  ":CHADopen<cr>",
-  { noremap = true }
-)
+--vim.keymap.set(
+--  "n",
+--  "<leader>v",
+--  ":CHADopen<cr>",
+--  { noremap = true }
+--)
 
 -- LSP settings.
 --  This function gets run when an LSP connects to a particular buffer.
@@ -470,6 +480,7 @@ local on_attach = function(_, bufnr)
 
   -- Lesser used LSP functionality
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+  nmap('<leader>f', vim.lsp.buf.format, '[F] Format')
   nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
   nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
   nmap('<leader>wl', function()
