@@ -506,7 +506,7 @@ local servers = {
     },
     staticcheck = true,
   },
-  -- pyright = {},
+  pyright = {},
   rust_analyzer = {},
   tsserver = {},
   lua_ls = {
