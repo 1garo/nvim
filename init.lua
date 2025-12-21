@@ -210,9 +210,6 @@ require('lazy').setup({
     -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ":TSUpdate",
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter-textobjects",
-    },
     opts = {
       ensure_installed = {
         "c", "go", "lua", "python", "rust",
@@ -275,7 +272,7 @@ require('lazy').setup({
       },
     },
     config = function(_, opts)
-      require("nvim-treesitter.configs").setup(opts)
+      require("nvim-treesitter.config").setup(opts)
     end,
   },
 }, {})
