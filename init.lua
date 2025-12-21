@@ -99,7 +99,7 @@ require('lazy').setup({
   {
     -- Rose Pine theme
     'sainnhe/gruvbox-material',
-    priority = 122,
+    priority = 1,
     config = function()
       vim.g.gruvbox_material_background = 'hard'
       vim.o.background = 'dark'
@@ -123,7 +123,7 @@ require('lazy').setup({
   {
     -- Gruvbox theme
     'morhetz/gruvbox',
-    priority = 1,
+    priority = 2,
     config = function()
       vim.o.background = 'dark'
       vim.cmd.colorscheme 'gruvbox'
@@ -177,12 +177,14 @@ require('lazy').setup({
     'lukas-reineke/indent-blankline.nvim',
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help indent_blankline.txt`
+    main = "ibl",
+    ---@module "ibl"
+    ---@type ibl.config
     opts = {
-      --char = '|',
-      show_trailing_blankline_indent = false,
-      show_end_of_line = true,
-      --space_char_blankline = " ",
-
+      indent = {char = '|'},
+      -- show_trailing_blankline_indent = false,
+      -- show_end = true,
+      scope = {enabled = true, show_end = true}
     },
   },
 
@@ -508,7 +510,7 @@ local servers = {
   },
   pyright = {},
   rust_analyzer = {},
-  tsserver = {},
+  -- tsserver = {},
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
